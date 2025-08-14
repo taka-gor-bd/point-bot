@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earning App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Added ad script integration -->
+    <script src='//libtl.com/sdk.js' data-zone='9709495' data-sdk='show_9709495'></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            /* Updated to sophisticated dark gradient background */
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            /* Updated shadow to match new premium theme */
+            box-shadow: 0 0 40px rgba(26, 26, 46, 0.3);
+        }
+
+        /* Header */
+        .header {
+            /* Premium dark gradient header */
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            /* Enhanced shadow for premium look */
+            box-shadow: 0 4px 25px rgba(26, 26, 46, 0.4);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-profile {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            /* Premium gold border */
+            border: 2px solid #f39c12;
+        }
+
+        .header-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .header-info p {
+            font-size: 12px;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Updated icon styles with premium gold accents */
+        .icon {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+            border-radius: 2px;
+            filter: drop-shadow(0 1px 2px rgba(243, 156, 18, 0.3));
+        }
+
+        .icon-lg {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            border-radius: 4px;
+            filter: drop-shadow(0 2px 4px rgba(243, 156, 18, 0.3));
+        }
+
+        .icon-xl {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            border-radius: 6px;
+            filter: drop-shadow(0 3px 6px rgba(243, 156, 18, 0.3));
+        }
+
+        .icon-xxl {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 8px;
+            filter: drop-shadow(0 4px 8px rgba(243, 156, 18, 0.3));
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            margin-right: 8px;
+            filter: brightness(1.1);
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            padding: 20px;
+            padding-bottom: 100px;
+            /* Added subtle background pattern */
+            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            /* Premium shadow with gold accent */
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1), 0 0 0 1px rgba(243, 156, 18, 0.1);
+        }
+
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            /* Premium gold border */
+            border: 4px solid #f39c12;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            /* Premium dark color */
+            color: #1a1a2e;
+        }
+
+        .join-date {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        /* Statistics */
+        .stats-section h2 {
+            /* Premium dark color */
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            /* Premium shadow with subtle gold accent */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 0 0 1px rgba(243, 156, 18, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            /* Premium gold gradient accent */
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Updated stat card colors to premium palette */
+        .stat-card:nth-child(1) .stat-icon { 
+            background: linear-gradient(135deg, #f39c12, #e67e22); 
+        }
+        .stat-card:nth-child(2) .stat-icon { 
+            background: linear-gradient(135deg, #1a1a2e, #16213e); 
+        }
+        .stat-card:nth-child(3) .stat-icon { 
+            background: linear-gradient(135deg, #27ae60, #2ecc71); 
+        }
+        .stat-card:nth-child(4) .stat-icon { 
+            background: linear-gradient(135deg, #8e44ad, #9b59b6); 
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            /* Premium dark color */
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex-direction: column;
+        }
+
+        .currency-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex-direction: column;
+        }
+
+        .points-amount {
+            font-size: 18px;
+            font-weight: 700;
+            /* Premium dark color */
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .dollar-equivalent {
+            font-size: 12px;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        /* Updated balance card with premium dark gradient */
+        .balance-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            /* Premium shadow */
+            box-shadow: 0 8px 35px rgba(26, 26, 46, 0.4);
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            /* Premium gold accent overlay */
+            background: radial-gradient(circle, rgba(243, 156, 18, 0.15) 0%, transparent 70%);
+        }
+
+        .balance-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .balance-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .balance-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            /* Premium gold border */
+            border: 2px solid #f39c12;
+        }
+
+        .balance-info h3 {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .balance-info p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .balance-amount {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .balance-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            /* Premium gold border */
+            border-top: 1px solid rgba(243, 156, 18, 0.3);
+            padding-top: 20px;
+        }
+
+        .balance-stat h4 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .balance-stat p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Updated invite card with premium gradient */
+        .invite-card {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            border-radius: 20px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 20px;
+            position: relative;
+            /* Premium shadow */
+            box-shadow: 0 8px 35px rgba(243, 156, 18, 0.3);
+        }
+
+        .invite-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .invite-header h3 {
+            font-size: 18px;
+        }
+
+        .invite-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .invite-desc {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .invite-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .invite-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Task Section */
+        .task-section h2 {
+            /* Premium dark color */
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            /* Premium shadow */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 0 0 1px rgba(243, 156, 18, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .task-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .task-icon {
+            width: 50px;
+            height: 50px;
+            /* Premium dark gradient */
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .task-details h3 {
+            font-size: 16px;
+            /* Premium dark color */
+            color: #1a1a2e;
+            margin-bottom: 5px;
+        }
+
+        .task-details p {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .task-badge {
+            /* Premium gold gradient */
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Telegram task styles */
+        .telegram-task {
+            /* Premium dark gradient for Telegram */
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* Premium shadow */
+            box-shadow: 0 8px 25px rgba(26, 26, 46, 0.3);
+        }
+
+        .telegram-task-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .telegram-task-icon {
+            width: 50px;
+            height: 50px;
+            /* Premium gold background */
+            background: rgba(243, 156, 18, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .telegram-task-details h3 {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .telegram-task-details p {
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+        }
+
+        .join-btn {
+            /* Premium gold button */
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .join-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        /* Buttons */
+        .primary-btn {
+            /* Premium dark gradient */
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(26, 26, 46, 0.3);
+        }
+
+        .secondary-btn {
+            /* Premium gold gradient */
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(243, 156, 18, 0.3);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            /* Premium dark color */
+            color: #1a1a2e;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            /* Premium gold focus */
+            border-color: #f39c12;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group .form-input {
+            flex: 1;
+        }
+
+        .input-suffix {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-left: none;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            color: #7f8c8d;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .payment-method {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .payment-method.active {
+            /* Premium gold active state */
+            border-color: #f39c12;
+            background: #fef9e7;
+        }
+
+        .payment-method img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        .payment-method span {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .country-selection {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .country-selection.show {
+            display: block;
+        }
+
+        .country-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .country-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .country-option.active {
+            /* Premium gold active state */
+            border-color: #f39c12;
+            background: #fef9e7;
+        }
+
+        .country-flag {
+            width: 24px;
+            height: 16px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .country-name {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* Referral Steps */
+        .referral-steps {
+            margin-bottom: 30px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        /* Updated step icons with premium colors */
+        .step:nth-child(1) .step-icon { 
+            background: linear-gradient(135deg, #f39c12, #e67e22); 
+        }
+        .step:nth-child(2) .step-icon { 
+            background: linear-gradient(135deg, #1a1a2e, #16213e); 
+        }
+        .step:nth-child(3) .step-icon { 
+            background: linear-gradient(135deg, #27ae60, #2ecc71); 
+        }
+
+        .step-content h3 {
+            /* Premium dark color */
+            color: #1a1a2e;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .step-content p {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* Referral Link */
+        .referral-link-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            /* Premium shadow */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 0 0 1px rgba(243, 156, 18, 0.05);
+        }
+
+        .referral-link-section h3 {
+            /* Premium dark color */
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+
+        .link-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .link-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #f8f9fa;
+        }
+
+        .copy-btn {
+            /* Premium gold button */
+            background: #f39c12;
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #e67e22;
+        }
+
+        /* Share Buttons */
+        .share-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .share-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .telegram-btn {
+            /* Premium dark gradient for Telegram */
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+        }
+
+        .whatsapp-btn {
+            /* Premium green gradient for WhatsApp */
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            /* Premium border with gold accent */
+            border-top: 1px solid rgba(243, 156, 18, 0.2);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 100;
+            /* Premium shadow */
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            min-width: 60px;
+        }
+
+        .nav-item.active {
+            /* Premium gold active state */
+            background: #fef9e7;
+            color: #f39c12;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            margin: 0 auto;
+            /* Premium filter for active state */
+            transition: filter 0.3s ease;
+        }
+
+        .nav-item.active .nav-icon {
+            filter: sepia(1) saturate(2) hue-rotate(25deg) brightness(1.2);
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* Overview Cards */
+        .overview-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            /* Premium shadow */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 0 0 1px rgba(243, 156, 18, 0.05);
+        }
+
+        .overview-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .overview-header h2 {
+            /* Premium dark color */
+            color: #1a1a2e;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .overview-stat {
+            text-align: center;
+        }
+
+        .overview-stat h3 {
+            font-size: 24px;
+            /* Premium dark color */
+            color: #1a1a2e;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .overview-stat p {
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+
+        /* Help Items */
+        .help-item {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            /* Premium shadow */
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05), 0 0 0 1px rgba(243, 156, 18, 0.05);
+        }
+
+        .help-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .help-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            /* Premium gold gradient */
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 15px;
+        }
+
+        .help-content {
+            flex: 1;
+        }
+
+        .help-content h3 {
+            /* Premium dark color */
+            color: #1a1a2e;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .help-arrow {
+            color: #bdc3c7;
+            font-size: 18px;
+        }
+
+        /* Ad overlay styles */
+        .ad-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ad-popup {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .ad-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Premium custom alert system */
+        .custom-alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 26, 46, 0.8);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .custom-alert {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 25px;
+            max-width: 320px;
+            width: 90%;
+            text-align: center;
+            /* Premium shadow */
+            box-shadow: 0 20px 60px rgba(26, 26, 46, 0.4);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .custom-alert.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .custom-alert-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            /* Premium gold gradient */
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .custom-alert-title {
+            font-size: 18px;
+            font-weight: 700;
+            /* Premium dark color */
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+
+        .custom-alert-message {
+            font-size: 14px;
+            color: #7f8c8d;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .custom-alert-btn {
+            /* Premium dark gradient */
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .custom-alert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(26, 26, 46, 0.3);
+        }
+
+        .task-completed {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .task-completed::after {
+            content: 'Completed - Wait 24h';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .balance-stats {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Enhanced premium ad button styles */
+        .ad-button {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+            box-shadow: 0 8px 30px rgba(243, 156, 18, 0.3);
+        }
+
+        .ad-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(243, 156, 18, 0.4);
+        }
+
+        .ad-button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <img id="headerProfilePic" src="https://i.ibb.co/L5k6v7R/default-profile.jpg" alt="Profile" class="header-profile">
+                <div class="header-info">
+                    <h3 id="userName">NAHIA ψ | ناهد</h3>
+                    <!-- Updated header to show points and dollar equivalent -->
+                    <p>Balance: <img src="point.png" alt="Points" class="icon"> <span id="headerBalanceValue">100000</span> (~<img src="dollar.png" alt="$" class="icon">$<span id="headerDollarValue">100.00</span>)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Home Page -->
+        <div id="homePage" class="page active">
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <div class="balance-header">
+                    <div class="balance-user">
+                        <img id="balanceProfilePic" src="https://i.ibb.co/L5k6v7R/default-profile.jpg" alt="Profile" class="balance-pic">
+                        <div class="balance-info">
+                            <h3 id="balanceUserName">NAHIA ψ | ناهد</h3>
+                        </div>
+                    </div>
+                    <!-- Updated balance display with points and dollar conversion -->
+                    <div class="balance-amount">
+                        <div class="points-amount">
+                            <img src="point.png" alt="Points" class="icon"> <span id="totalBalanceAmount">100000</span>
+                        </div>
+                        <div class="dollar-equivalent">
+                            <img src="dollar.png" alt="$" class="icon"> $<span id="totalDollarAmount">100.00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="balance-stats">
+                    <div class="balance-stat">
+                        <h4><img src="point.png" alt="Points" class="icon"> <span id="balanceTotal">100000</span></h4>
+                        <p>Total Balance</p>
+                    </div>
+                    <div class="balance-stat">
+                        <h4><img src="point.png" alt="Points" class="icon"> <span id="balanceEarning">100000</span></h4>
+                        <p>Total Earning</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invite Card -->
+            <div class="invite-card">
+                <div class="invite-header">
+                    <h3>Invite Friends & Earn</h3>
+                    <div class="invite-icon"><img src="refer.png" alt="Refer" class="icon-lg"></div>
+                </div>
+                <p class="invite-desc">Get 10% of their earnings</p>
+                <button class="invite-btn" onclick="showPage('referPage')">Start Referring</button>
+            </div>
+
+            <!-- Added Telegram channel join task -->
+            <div class="telegram-task">
+                <div class="telegram-task-info">
+                    <div class="telegram-task-icon">
+                        <img src="telegram.png" alt="Telegram" class="icon-lg">
+                    </div>
+                    <div class="telegram-task-details">
+                        <h3>Join Our Channel</h3>
+                        <p>Get 5000 points bonus</p>
+                    </div>
+                </div>
+                <button class="join-btn" id="joinChannelBtn">Join</button>
+            </div>
+
+            <!-- Available Tasks -->
+            <div class="task-section">
+                <h2>Available Tasks</h2>
+                <div class="task-card">
+                    <div class="task-info">
+                        <div class="task-icon"><img src="ads.png" alt="Ads" class="icon-lg"></div>
+                        <div class="task-details">
+                            <h3>Watch Ads</h3>
+                            <p>Earn by watching short video ads</p>
+                        </div>
+                    </div>
+                    <div class="task-badge">Ads</div>
+                </div>
+                <button class="primary-btn" onclick="showPage('adsPage')">Start Task</button>
+            </div>
+        </div>
+
+        <!-- Ads Task Page -->
+        <div id="adsPage" class="page">
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h2>Ads Task Overview</h2>
+                </div>
+                <div class="overview-grid">
+                    <div class="overview-stat">
+                        <h3 id="dailyTasksCompleted">0</h3>
+                        <p>Daily Tasks Completed</p>
+                        <p style="margin-top: 10px; font-size: 11px;">Limit: <span id="dailyTaskLimit">50</span> tasks/day</p>
+                    </div>
+                    <div class="overview-stat">
+                        <!-- Updated to show points instead of BDT -->
+                        <h3><img src="point.png" alt="Points" class="icon"> <span id="adsCurrentBalance">100000</span></h3>
+                        <p>Current Balance</p>
+                    </div>
+                </div>
+                <div class="overview-grid" style="margin-top: 20px;">
+                    <div class="overview-stat">
+                        <h3 id="lifetimeTasks">2</h3>
+                        <p>Lifetime Tasks</p>
+                    </div>
+                    <div class="overview-stat">
+                        <h3><img src="point.png" alt="Points" class="icon"> <span id="adsTotalEarnings">100000</span></h3>
+                        <p>Total Earnings</p>
+                    </div>
+                </div>
+            </div>
+            <button class="primary-btn" id="startTaskBtn">Start Task</button>
+            <!-- Added rewarded ad button -->
+            <button class="secondary-btn" id="watchRewardedAdBtn">Watch Rewarded Ad</button>
+        </div>
+
+        <!-- Refer Page -->
+        <div id="referPage" class="page">
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h2>Refer & Earn Forever</h2>
+                    <div style="background: linear-gradient(135deg, #74b9ff, #0984e3); color: white; padding: 5px 15px; border-radius: 20px; display: inline-block; font-size: 14px; font-weight: 600;">10%</div>
+                </div>
+                <p style="text-align: center; color: #7f8c8d; margin-bottom: 25px;">Earn 10% of your friends earnings for life!<br>Follow these simple steps to start:</p>
+                
+                <div class="referral-steps">
+                    <div class="step">
+                        <div class="step-icon">
+                            <img src="link-icon.png" alt="Link" class="icon-lg" style="filter: brightness(0) invert(1);">
+                        </div>
+                        <div class="step-content">
+                            <h3>1. Copy Your Link</h3>
+                            <p>Grab your unique referral link below.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                       
+                        <div class="step-icon">
+                            <img src="share-icon.png" alt="Share" class="icon-lg" style="filter: brightness(0) invert(1);">
+                        </div>
+                        <div class="step-content">
+                            <h3>2. Share with Friends</h3>
+                            <p>Use the Telegram, WhatsApp, buttons to share your link.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        
+                        <div class="step-icon">
+                            <img src="money-icon.png" alt="Money" class="icon-lg" style="filter: brightness(0) invert(1);">
+                        </div>
+                        <div class="step-content">
+                            <h3>3. Earn Lifetime Rewards</h3>
+                            <p>Get 10% of your friends earnings forever once they join!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="referral-link-section">
+                <h3>Your Referral Link</h3>
+                <div class="link-input-group">
+                    <input type="text" id="referralLink" class="link-input" value="https://t.me/your_bot_name?startapp=ref123" readonly>
+                    
+                    <button class="copy-btn" id="copyLinkBtn">
+                        <img src="copy-icon.png" alt="Copy" class="icon">
+                    </button>
+                </div>
+            </div>
+
+            <div class="share-buttons">
+               
+                <button class="share-btn telegram-btn" id="telegramShareBtn">
+                    <img src="telegram.png" alt="Telegram" class="social-icon">
+                    Telegram
+                </button>
+                <button class="share-btn whatsapp-btn" id="whatsappShareBtn">
+                    <img src="whatsapp.png" alt="WhatsApp" class="social-icon">
+                    WhatsApp
+                </button>
+            </div>
+        </div>
+
+        <!-- Withdraw Page -->
+        <div id="withdrawPage" class="page">
+            <div class="overview-card">
+                <div class="overview-header">
+                    <h2>Withdraw Funds</h2>
+                    <!-- Updated to show points and dollar equivalent -->
+                    <div style="background: linear-gradient(135deg, #ffeaa7, #fdcb6e); color: #2c3e50; padding: 5px 15px; border-radius: 20px; display: inline-block; font-size: 14px; font-weight: 600;">
+                        <img src="point.png" alt="Points" class="icon"> <span id="withdrawBalance">100000</span> (~<img src="dollar.png" alt="$" class="icon">$<span id="withdrawDollarBalance">100.00</span>)
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Amount</label>
+                    <div class="input-group">
+                        <input type="number" id="withdrawAmount" class="form-input" placeholder="Enter amount">
+                        <!-- Updated suffix to show points -->
+                        <div class="input-suffix">
+                            <img src="point.png" alt="Points" class="icon"> Points
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Withdrawal Address</label>
+                    <input type="text" id="withdrawalAddress" class="form-input" placeholder="Enter wallet or account address">
+                    <p style="font-size: 12px; color: #7f8c8d; margin-top: 5px;">Enter the address for your selected payment method.</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Payment Method</label>
+                    <!-- Updated payment methods with logos -->
+                    <div class="payment-methods">
+                        <div class="payment-method active" data-method="binance" data-type="crypto">
+                            <img src="binance.png" alt="Binance">
+                            <span>Binance</span>
+                        </div>
+                        <div class="payment-method" data-method="bkash" data-type="mobile">
+                            <img src="bkash.png" alt="Bkash">
+                            <span>Bkash</span>
+                        </div>
+                        <div class="payment-method" data-method="nagad" data-type="mobile">
+                            <img src="nagad.png" alt="Nagad">
+                            <span>Nagad</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Added country selection for mobile banking -->
+                <div class="form-group country-selection" id="countrySelection">
+                    <label class="form-label">Select Country</label>
+                    <div class="country-grid">
+                        <div class="country-option active" data-country="BD">
+                            <img src="bd-flag.png" alt="Bangladesh" class="country-flag">
+                            <span class="country-name">Bangladesh</span>
+                        </div>
+                        <div class="country-option" data-country="IN">
+                            <img src="in-flag.png" alt="India" class="country-flag">
+                            <span class="country-name">India</span>
+                        </div>
+                        <div class="country-option" data-country="PK">
+                            <img src="pk-flag.png" alt="Pakistan" class="country-flag">
+                            <span class="country-name">Pakistan</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="primary-btn" id="requestWithdrawalBtn">Request Withdrawal</button>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profilePage" class="page">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <img id="profilePagePic" src="https://i.ibb.co/L5k6v7R/default-profile.jpg" alt="Profile" class="profile-pic">
+                <h2 class="profile-name" id="profileName">NAHIA ψ | ناهد</h2>
+                <p class="join-date">Joined August 7, 2025</p>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-section">
+                <h2>Your Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><img src="point.png" alt="Points" class="icon-lg"></div>
+                        <p class="stat-label">Total Earned</p>
+                        <!-- Updated to show points and dollar equivalent -->
+                        <div class="stat-value">
+                            <div class="currency-display">
+                                <div class="points-amount">
+                                    <img src="point.png" alt="Points" class="icon"> <span id="profileTotalEarned">100000</span>
+                                </div>
+                                <div class="dollar-equivalent">
+                                    <img src="dollar.png" alt="$" class="icon"> $<span id="profileTotalEarnedDollar">100.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><img src="tasks.png" alt="Tasks" class="icon-lg"></div>
+                        <p class="stat-label">Tasks Done</p>
+                        <p class="stat-value" id="profileTasksDone">2</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><img src="point.png" alt="Points" class="icon-lg"></div>
+                        <p class="stat-label">My Balance</p>
+                        <div class="stat-value">
+                            <div class="currency-display">
+                                <div class="points-amount">
+                                    <img src="point.png" alt="Points" class="icon"> <span id="profileBalance">100000</span>
+                                </div>
+                                <div class="dollar-equivalent">
+                                    <img src="dollar.png" alt="$" class="icon"> $<span id="profileBalanceDollar">100.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><img src="refer.png" alt="Referrals" class="icon-lg"></div>
+                        <p class="stat-label">Referrals</p>
+                        <p class="stat-value" id="profileReferrals">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Items -->
+            <div class="help-item">
+                <div class="help-icon">❓</div>
+                <div class="help-content">
+                    <h3>Help Center</h3>
+                </div>
+                <div class="help-arrow">›</div>
+            </div>
+
+            <div class="help-item">
+                <div class="help-icon">📱</div>
+                <div class="help-content">
+                    <h3>Developer Contact</h3>
+                </div>
+                <div class="help-arrow">›</div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <!-- Replaced emojis with PNG file references -->
+            <div class="nav-item active" onclick="showPage('homePage')">
+                <img src="home.png" alt="Home" class="nav-icon">
+                <div class="nav-label">Home</div>
+            </div>
+            <div class="nav-item" onclick="showPage('adsPage')">
+                <img src="ads.png" alt="Ads" class="nav-icon">
+                <div class="nav-label">Ads Task</div>
+            </div>
+            <div class="nav-item" onclick="showPage('referPage')">
+                <img src="refer.png" alt="Refer" class="nav-icon">
+                <div class="nav-label">Refer</div>
+            </div>
+            <div class="nav-item" onclick="showPage('withdrawPage')">
+                <img src="withdraw.png" alt="Withdraw" class="nav-icon">
+                <div class="nav-label">Withdraw</div>
+            </div>
+            <div class="nav-item" onclick="showPage('profilePage')">
+                <img src="profile.png" alt="Profile" class="nav-icon">
+                <div class="nav-label">Profile</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Added custom alert system -->
+    <div class="custom-alert-overlay" id="customAlertOverlay">
+        <div class="custom-alert" id="customAlert">
+            <div class="custom-alert-icon" id="customAlertIcon">🎉</div>
+            <div class="custom-alert-title" id="customAlertTitle">Success!</div>
+            <div class="custom-alert-message" id="customAlertMessage">Operation completed successfully.</div>
+            <button class="custom-alert-btn" onclick="closeCustomAlert()">OK</button>
+        </div>
+    </div>
+
+    <!-- Added ad overlay for popup ads -->
+    <div class="ad-overlay" id="adOverlay">
+        <div class="ad-popup">
+            <button class="ad-close" onclick="closeAdPopup()">×</button>
+            <h3>Advertisement</h3>
+            <p>Watch this ad to earn points!</p>
+            <div id="adContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        const defaultProfilePic = 'https://i.ibb.co/L5k6v7R/default-profile.jpg';
+        const botUsername = 'your_earning_bot'; // আপনার বটের ইউজারনেম এখানে দিন
+
+        let appState = JSON.parse(localStorage.getItem('appState')) || {
+            balance: 1000, // Reduced from 100000 to 1000 points
+            totalEarnings: 1000,
+            adsWatched: 2,
+            dailyTasksCompleted: 0,
+            dailyTaskLimit: 50,
+            referrals: 0,
+            lastBonusClaim: null,
+            userId: null,
+            channelJoined: false,
+            lastTaskDate: null,
+            taskCooldownEnd: null
+        };
+
+        const userData = tg.initDataUnsafe.user;
+        
+        if (userData && userData.id) {
+            appState.userId = userData.id;
+            saveState();
+        }
+
+        function checkDailyReset() {
+            const today = new Date().toDateString();
+            if (appState.lastTaskDate !== today) {
+                appState.dailyTasksCompleted = 0;
+                appState.lastTaskDate = today;
+                saveState();
+            }
+        }
+
+        function pointsToDollar(points) {
+            return (points / 1000).toFixed(2);
+        }
+
+        function saveState() {
+            localStorage.setItem('appState', JSON.stringify(appState));
+        }
+
+        function showCustomAlert(title, message, icon = '🎉') {
+            document.getElementById('customAlertTitle').textContent = title;
+            document.getElementById('customAlertMessage').textContent = message;
+            document.getElementById('customAlertIcon').textContent = icon;
+            
+            const overlay = document.getElementById('customAlertOverlay');
+            const alert = document.getElementById('customAlert');
+            
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                alert.classList.add('show');
+            }, 10);
+        }
+
+        function closeCustomAlert() {
+            const overlay = document.getElementById('customAlertOverlay');
+            const alert = document.getElementById('customAlert');
+            
+            alert.classList.remove('show');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+
+        function updateUI() {
+            if (userData) {
+                const fullName = `${userData.first_name || ''} ${userData.last_name || ''}`.trim() || 'User';
+                document.getElementById('headerProfilePic').src = userData.photo_url || defaultProfilePic;
+                document.getElementById('balanceProfilePic').src = userData.photo_url || defaultProfilePic;
+                document.getElementById('profilePagePic').src = userData.photo_url || defaultProfilePic;
+                document.getElementById('userName').textContent = fullName;
+                document.getElementById('balanceUserName').textContent = fullName;
+                document.getElementById('profileName').textContent = fullName;
+            } else {
+                // Show "User" when not from Telegram
+                document.getElementById('userName').textContent = 'User';
+                document.getElementById('balanceUserName').textContent = 'User';
+                document.getElementById('profileName').textContent = 'User';
+            }
+
+            document.getElementById('headerBalanceValue').textContent = appState.balance.toLocaleString();
+            document.getElementById('headerDollarValue').textContent = pointsToDollar(appState.balance);
+            document.getElementById('totalBalanceAmount').textContent = appState.balance.toLocaleString();
+            document.getElementById('totalDollarAmount').textContent = pointsToDollar(appState.balance);
+            document.getElementById('balanceTotal').textContent = appState.balance.toLocaleString();
+            document.getElementById('balanceEarning').textContent = appState.totalEarnings.toLocaleString();
+            document.getElementById('adsCurrentBalance').textContent = appState.balance.toLocaleString();
+            document.getElementById('adsTotalEarnings').textContent = appState.totalEarnings.toLocaleString();
+            document.getElementById('withdrawBalance').textContent = appState.balance.toLocaleString();
+            document.getElementById('withdrawDollarBalance').textContent = pointsToDollar(appState.balance);
+            document.getElementById('profileTotalEarned').textContent = appState.totalEarnings.toLocaleString();
+            document.getElementById('profileTotalEarnedDollar').textContent = pointsToDollar(appState.totalEarnings);
+            document.getElementById('profileBalance').textContent = appState.balance.toLocaleString();
+            document.getElementById('profileBalanceDollar').textContent = pointsToDollar(appState.balance);
+
+            // Task updates
+            document.getElementById('dailyTasksCompleted').textContent = appState.dailyTasksCompleted;
+            document.getElementById('dailyTaskLimit').textContent = appState.dailyTaskLimit;
+            document.getElementById('lifetimeTasks').textContent = appState.adsWatched;
+            document.getElementById('profileTasksDone').textContent = appState.adsWatched;
+            document.getElementById('profileReferrals').textContent = appState.referrals;
+
+            // Referral link
+            if (userData) {
+                document.getElementById('referralLink').value = `https://t.me/${botUsername}?startapp=ref${userData.id}`;
+            }
+
+            const joinBtn = document.getElementById('joinChannelBtn');
+            if (appState.channelJoined) {
+                joinBtn.textContent = 'Completed ✓';
+                joinBtn.disabled = true;
+                joinBtn.style.opacity = '0.6';
+            } else if (appState.taskCooldownEnd && new Date() < new Date(appState.taskCooldownEnd)) {
+                const remainingHours = Math.ceil((new Date(appState.taskCooldownEnd) - new Date()) / (1000 * 60 * 60));
+                joinBtn.textContent = `Wait ${remainingHours}h`;
+                joinBtn.disabled = true;
+                joinBtn.style.opacity = '0.6';
+            }
+        }
+
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.nav-item').classList.add('active');
+        }
+
+        document.getElementById('joinChannelBtn').addEventListener('click', function() {
+            if (appState.channelJoined || (appState.taskCooldownEnd && new Date() < new Date(appState.taskCooldownEnd))) return;
+            
+            // Open Telegram channel
+            window.open('https://t.me/your_channel_username', '_blank');
+            
+            setTimeout(() => {
+                const bonus = 40; // Reduced bonus
+                appState.balance += bonus;
+                appState.totalEarnings += bonus;
+                appState.channelJoined = true;
+                
+                // Set 24-hour cooldown
+                const cooldownEnd = new Date();
+                cooldownEnd.setHours(cooldownEnd.getHours() + 24);
+                appState.taskCooldownEnd = cooldownEnd.toISOString();
+                
+                saveState();
+                updateUI();
+                showCustomAlert('Welcome Bonus!', `You earned ${bonus} points for joining our channel!`, '🎉');
+                tg.HapticFeedback.notificationOccurred('success');
+            }, 3000);
+        });
+
+        document.getElementById('startTaskBtn').addEventListener('click', function() {
+            checkDailyReset();
+            
+            if (appState.dailyTasksCompleted >= appState.dailyTaskLimit) {
+                showCustomAlert('Daily Limit Reached', 'You have completed all tasks for today. Come back tomorrow!', '⏰');
+                return;
+            }
+
+            // Show interstitial ad
+            show_9709495().then(() => {
+                const adReward = 10; // Fixed 10 points per ad
+                appState.balance += adReward;
+                appState.totalEarnings += adReward;
+                appState.adsWatched++;
+                appState.dailyTasksCompleted++;
+                
+                // Send data to Telegram bot
+                if (userData && userData.id) {
+                    const adData = {
+                        type: 'ad_completed',
+                        userId: userData.id,
+                        reward: adReward,
+                        timestamp: new Date().toISOString()
+                    };
+                    tg.sendData(JSON.stringify(adData));
+                }
+                
+                saveState();
+                updateUI();
+                showCustomAlert('Ad Completed!', `You earned ${adReward} points! ${appState.dailyTaskLimit - appState.dailyTasksCompleted} tasks remaining today.`, '💰');
+                tg.HapticFeedback.notificationOccurred('success');
+            }).catch(e => {
+                showCustomAlert('Ad Error', 'Ad failed to load. Please try again.', '❌');
+            });
+        });
+
+        document.getElementById('watchRewardedAdBtn').addEventListener('click', function() {
+            show_9709495('pop').then(() => {
+                const adReward = 20; // Fixed 20 points for rewarded ads
+                appState.balance += adReward;
+                appState.totalEarnings += adReward;
+                
+                saveState();
+                updateUI();
+                showCustomAlert('Bonus Reward!', `You earned ${adReward} points from the rewarded ad!`, '🎁');
+                tg.HapticFeedback.notificationOccurred('success');
+            }).catch(e => {
+                showCustomAlert('Ad Not Available', 'Rewarded ad is not available right now. Try again later.', '⏳');
+            });
+        });
+
+        let adTimer;
+        function startAutoAds() {
+            adTimer = setInterval(() => {
+                show_9709495({
+                    type: 'inApp',
+                    inAppSettings: {
+                        frequency: 2,
+                        capping: 0.1,
+                        interval: 30,
+                        timeout: 5,
+                        everyPage: false
+                    }
+                });
+            }, 120000); // Show every 2 minutes
+        }
+
+        // Start auto ads after 30 seconds
+        setTimeout(startAutoAds, 30000);
+
+        // Copy referral link
+        document.getElementById('copyLinkBtn').addEventListener('click', function() {
+            const linkInput = document.getElementById('referralLink');
+            linkInput.select();
+            document.execCommand('copy');
+            showCustomAlert('Link Copied', 'Referral link copied to clipboard!', '🔗');
+        });
+
+        // Share buttons
+        document.getElementById('telegramShareBtn').addEventListener('click', function() {
+            const link = document.getElementById('referralLink').value;
+            const message = `Join this amazing earning app and start making money! ${link}`;
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(message)}`);
+        });
+
+        document.getElementById('whatsappShareBtn').addEventListener('click', function() {
+            const link = document.getElementById('referralLink').value;
+            const message = `Join this amazing earning app and start making money! ${link}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
+        });
+
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', function() {
+                document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+                this.classList.add('active');
+                
+                const countrySelection = document.getElementById('countrySelection');
+                if (this.dataset.type === 'mobile') {
+                    countrySelection.classList.add('show');
+                } else {
+                    countrySelection.classList.remove('show');
+                }
+            });
+        });
+
+        // Country selection
+        document.querySelectorAll('.country-option').forEach(country => {
+            country.addEventListener('click', function() {
+                document.querySelectorAll('.country-option').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.getElementById('requestWithdrawalBtn').addEventListener('click', function() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const address = document.getElementById('withdrawalAddress').value;
+            const selectedMethod = document.querySelector('.payment-method.active').dataset.method;
+            const selectedCountry = document.querySelector('.country-option.active')?.dataset.country || 'BD';
+
+            if (!amount || amount <= 0) {
+                showCustomAlert('Invalid Amount', 'Please enter a valid amount', '❌');
+                return;
+            }
+
+            if (amount > appState.balance) {
+                showCustomAlert('Insufficient Balance', 'You do not have enough points for this withdrawal', '💸');
+                return;
+            }
+
+            if (amount < 1000) {
+                showCustomAlert('Minimum Withdrawal', 'Minimum withdrawal is 1,000 points ($1.00)', '⚠️');
+                return;
+            }
+
+            if (!address) {
+                showCustomAlert('Missing Address', 'Please enter withdrawal address', '📝');
+                return;
+            }
+
+            // Send withdrawal request to bot
+            const withdrawalData = {
+                type: 'withdrawal_request',
+                userId: userData ? userData.id : null,
+                userInfo: userData ? {
+                    id: userData.id,
+                    first_name: userData.first_name,
+                    last_name: userData.last_name,
+                    username: userData.username
+                } : null,
+                amount: amount,
+                dollarEquivalent: pointsToDollar(amount),
+                address: address,
+                method: selectedMethod,
+                country: selectedCountry,
+                timestamp: new Date().toISOString(),
+                currentBalance: appState.balance
+            };
+
+            tg.sendData(JSON.stringify(withdrawalData));
+            showCustomAlert('Withdrawal Requested', `Withdrawal request for ${amount.toLocaleString()} points (~$${pointsToDollar(amount)}) sent successfully! We will process it within 24 hours.`, '🚀');
+            
+            // Clear form
+            document.getElementById('withdrawAmount').value = '';
+            document.getElementById('withdrawalAddress').value = '';
+        });
+
+        function closeAdPopup() {
+            document.getElementById('adOverlay').style.display = 'none';
+        }
+
+        checkDailyReset();
+        updateUI();
+
+        // Set Telegram theme
+        document.body.style.backgroundColor = tg.themeParams.bg_color || '#ffffff';
+
+        /* Navigation icons */
+        document.getElementById('homeTab').innerHTML = '<img src="home.png" alt="Home" class="icon"><span>Home</span>';
+        document.getElementById('adsTab').innerHTML = '<img src="ads.png" alt="Ads Task" class="icon"><span>Ads Task</span>';
+        document.getElementById('referTab').innerHTML = '<img src="refer.png" alt="Refer" class="icon"><span>Refer</span>';
+        document.getElementById('withdrawTab').innerHTML = '<img src="withdraw.png" alt="Withdraw" class="icon"><span>Withdraw</span>';
+        document.getElementById('profileTab').innerHTML = '<img src="profile.png" alt="Profile" class="icon"><span>Profile</span>';
+
+        /* Updated task completion rewards - reduced from 5000 to 40 points */
+        function completeTask(taskId) {
+            if (appState.completedTasks.includes(taskId)) {
+                showCustomAlert('Task Already Completed', 'You have already completed this task today!', '⚠️');
+                return;
+            }
+
+            const taskReward = 40; /* Fixed 40 points for task completion */
+            appState.balance += taskReward;
+            appState.totalEarnings += taskReward;
+            appState.completedTasks.push(taskId);
+            appState.tasksCompleted++;
+
+            /* Set 24-hour cooldown */
+            const cooldownEnd = new Date();
+            cooldownEnd.setHours(cooldownEnd.getHours() + 24);
+            appState.taskCooldowns[taskId] = cooldownEnd.toISOString();
+
+            saveState();
+            updateUI();
+            showCustomAlert('Task Completed!', `You earned ${taskReward} points! Task will be available again in 24 hours.`, '🎉');
+            tg.HapticFeedback.notificationOccurred('success');
+        }
+    </script>
+</body>
+</html>
